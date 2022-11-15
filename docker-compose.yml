@@ -9,8 +9,11 @@ services:
     restart: always
     volumes:
       - ./server:/server
+      - server_node_modules:/server/node_modules
     env_file:
       - ./server/.env
+    depends_on:
+      - database
 
   database:
     container_name: ngcash-database
@@ -23,7 +26,8 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: ngcash
+      POSTGRES_DB: postgres
 
 volumes:
   database:
+  server_node_modules:
