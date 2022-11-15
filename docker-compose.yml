@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  server:
+    container_name: ngcash-server
+    build: ./server
+    ports:
+      - "3001:3001"
+    restart: always
+    volumes:
+      - ./server:/server
+    env_file:
+      - ./server/.env
+
+  database:
+    container_name: ngcash-database
+    image: postgres:15-alpine
+    restart: always
+    volumes:
+      - database:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ngcash
+
+volumes:
+  database:
