@@ -4,6 +4,7 @@
   "description": "ngcash server",
   "main": "src/index.ts",
   "scripts": {
+    "dev": "tsnd --respawn --transpile-only --ignore-watch node_modules src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
