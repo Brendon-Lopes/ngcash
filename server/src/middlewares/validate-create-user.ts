@@ -6,7 +6,8 @@ export default class ValidateCreateUser extends ZodValidation {
     username: z
       .string({ required_error: 'username is required', invalid_type_error: 'username must be a string' })
       .min(3, 'username must be at least 3 characters long')
-      .max(30, 'username must be at most 30 characters long'),
+      .max(30, 'username must be at most 30 characters long')
+      .regex(/^[a-zA-Z0-9]+$/, 'username must contain only letters and numbers and no spaces'),
 
     password: z
       .string({ required_error: 'password is required', invalid_type_error: 'password must be a string' })
