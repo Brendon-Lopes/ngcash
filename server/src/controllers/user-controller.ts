@@ -8,4 +8,9 @@ export default class UserController {
     const user = await this.userServices.create(req.body)
     return res.status(201).json(user)
   }
+
+  async login (req: Request, res: Response): Promise<Response> {
+    const user = await this.userServices.login(req.body)
+    return res.status(200).json(user)
+  }
 }
