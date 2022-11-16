@@ -1,4 +1,4 @@
-FROM node:19-alpine
+FROM node:18-alpine
 
 WORKDIR /server
 
@@ -9,6 +9,8 @@ COPY package*.json ./
 RUN npm install
 
 COPY . ./
+
+RUN npx prisma generate
 
 EXPOSE 3001
 
