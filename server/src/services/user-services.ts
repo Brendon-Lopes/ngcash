@@ -5,6 +5,8 @@ import statusCodes from 'http-status-codes'
 import PasswordHandler from '../utils/password-handler'
 import ICreateUserResponse from '../interfaces/ICreateUserResponse'
 import tokenHandler from '../utils/jwt'
+import ILoginData from '../interfaces/ILoginData'
+import ILoginResponse from '../interfaces/ILoginResponse'
 
 export default class UserServices implements IUserServices {
   constructor (private readonly prisma: PrismaClient) {}
@@ -24,13 +26,30 @@ export default class UserServices implements IUserServices {
       }
     })
 
-    const token = tokenHandler.createToken({ id: user.id, username: user.username })
+    return {
+      id: user.id,
+      username: user.username,
+      accountId: user.accountId,
+      token: tokenHandler.createToken({ id: user.id, username: user.username })
+    }
+  }
+
+  async login (data: ILoginData): Promise<ILoginResponse> {
+    const user = await this.prisma.user.findUnique({
+      where: { username: data.username }
+    })
+
+    if (user === null) throw new CustomError(statusCodes.NOT_FOUND, 'User not found')
+
+    const isPasswordCorrect = await PasswordHandler.compare(data.password, user.password)
+
+    if (!isPasswordCorrect) throw new CustomError(statusCodes.UNAUTHORIZED, 'Invalid password')
 
     return {
       id: user.id,
       username: user.username,
       accountId: user.accountId,
-      token
+      token: tokenHandler.createToken({ id: user.id, username: user.username })
     }
   }
 
