@@ -7,7 +7,7 @@ class TokenHandler {
   constructor (private readonly secret: string) { }
 
   public createToken (payload: any): string {
-    return jwt.sign(payload, this.secret)
+    return jwt.sign(payload, this.secret, { expiresIn: '24h' })
   }
 
   public verifyToken (token: string): string | jwt.JwtPayload | undefined {
