@@ -5,6 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "dev": "tsnd --respawn --transpile-only --ignore-watch node_modules src/index.ts",
+    "migrate": "npx prisma migrate dev --name init --skip-generate",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -28,6 +29,7 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
+    "@prisma/client": "^4.6.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
