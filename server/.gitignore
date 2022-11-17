@@ -1,3 +1,4 @@
 node_modules
 ngcash.code-workspace
 prisma/migrations
+.nyc_output
