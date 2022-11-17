@@ -32,7 +32,7 @@ export default class UserServices implements IUserServices {
       id: user.id,
       username: user.username,
       accountId: user.accountId,
-      token: tokenHandler.createToken({ id: user.id, username: user.username })
+      token: tokenHandler.createToken({ id: user.id, username: user.username, accountId: user.accountId })
     }
   }
 
@@ -51,7 +51,7 @@ export default class UserServices implements IUserServices {
       id: user.id,
       username: user.username,
       accountId: user.accountId,
-      token: tokenHandler.createToken({ id: user.id, username: user.username })
+      token: tokenHandler.createToken({ id: user.id, username: user.username, accountId: user.accountId })
     }
   }
 
