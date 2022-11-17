@@ -14,4 +14,9 @@ export default class UserController {
     const user = await this.userServices.login(req.body)
     return res.status(statusCodes.OK).json(user)
   }
+
+  async readOne (req: Request, res: Response): Promise<Response> {
+    const user = await this.userServices.readOne(req.params.userId)
+    return res.status(statusCodes.OK).json(user)
+  }
 }
