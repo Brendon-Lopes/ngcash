@@ -12,12 +12,12 @@ datasource db {
 }
 
 model Account {
-  id                  String        @id @default(cuid())
-  balance             Decimal       @default(100.00) @db.Decimal(10, 2)
+  id      String  @id @default(cuid())
+  balance Decimal @default(100.00) @db.Decimal(10, 2)
+
   transactionDebited  Transaction[] @relation("debitedAccount")
   transactionCredited Transaction[] @relation("creditedAccount")
-
-  user User?
+  user                User?
 }
 
 model User {
