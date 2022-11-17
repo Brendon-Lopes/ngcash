@@ -8,6 +8,7 @@ import tokenHandler from '../utils/jwt'
 import ILoginData from '../interfaces/ILoginData'
 import ILoginResponse from '../interfaces/ILoginResponse'
 import ICreateUserData from '../interfaces/ICreateUserData'
+import IReadOneUserResponse from '../interfaces/IReadOneUserResponse'
 
 export default class UserServices implements IUserServices {
   constructor (private readonly prisma: PrismaClient) {}
@@ -51,6 +52,31 @@ export default class UserServices implements IUserServices {
       username: user.username,
       accountId: user.accountId,
       token: tokenHandler.createToken({ id: user.id, username: user.username })
+    }
+  }
+
+  async readOne (userId: string): Promise<IReadOneUserResponse> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        username: true,
+        accountId: true,
+        account: {
+          select: {
+            balance: true
+          }
+        }
+      }
+    })
+
+    if (user === null) throw new CustomError(statusCodes.NOT_FOUND, 'User not found')
+
+    return {
+      id: user.id,
+      username: user.username,
+      accountId: user.accountId,
+      balance: user.account.balance
     }
   }
 
