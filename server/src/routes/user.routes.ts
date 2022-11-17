@@ -2,6 +2,7 @@ import { Router } from 'express'
 import CreateUserController from '../factories/create-user-controller'
 import ValidateCreateUser from '../middlewares/validate-create-user'
 import ValidateLogin from '../middlewares/validate-login'
+import ValidateToken from '../middlewares/validate-token'
 
 const userRouter = Router()
 
@@ -18,6 +19,8 @@ userRouter.post(
   (req, res, next) => ValidateLogin.validate(req, res, next),
   async (req, res) => await userController.login(req, res)
 )
+
+userRouter.use(ValidateToken.execute)
 
 userRouter.get(
   '/:userId',
