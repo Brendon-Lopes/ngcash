@@ -23,13 +23,25 @@ describe('User Controller', () => {
 
   describe('Create method', () => {
     afterEach(() => sinon.restore())
+
+    it('should create a new user', async () => {
+      sinon.stub(userServices, 'create').resolves(createUserResponseMock)
+
+      await userController.create(req, res)
+      expect((res.status as sinon.SinonStub).calledWith(statusCodes.CREATED)).to.be.true
+      expect((res.json as sinon.SinonStub).calledWith(createUserResponseMock)).to.be.true
+    })
   })
 
-  it('should create a new user', async () => {
-    sinon.stub(userServices, 'create').resolves(createUserResponseMock)
+  describe('Login method', () => {
+    afterEach(() => sinon.restore())
 
-    await userController.create(req, res)
-    expect((res.status as sinon.SinonStub).calledWith(statusCodes.CREATED)).to.be.true
-    expect((res.json as sinon.SinonStub).calledWith(createUserResponseMock)).to.be.true
+    it('should login a user', async () => {
+      sinon.stub(userServices, 'login').resolves(createUserResponseMock)
+
+      await userController.login(req, res)
+      expect((res.status as sinon.SinonStub).calledWith(statusCodes.OK)).to.be.true
+      expect((res.json as sinon.SinonStub).calledWith(createUserResponseMock)).to.be.true
+    })
   })
 })
