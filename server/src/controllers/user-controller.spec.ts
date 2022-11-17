@@ -5,7 +5,8 @@ import statusCodes from 'http-status-codes'
 import UserServices from '../services/user-services'
 import prismaClient from '../database/prismaClient'
 import { Request, Response } from 'express'
-import { createUserResponseMock } from '../utils/mocks/user-mocks'
+import { createUserResponseMock, readOneUserResponseMock } from '../utils/mocks/user-mocks'
+import IReadOneUserResponse from '../interfaces/IReadOneUserResponse'
 
 const { expect } = chai
 
@@ -42,6 +43,20 @@ describe('User Controller', () => {
       await userController.login(req, res)
       expect((res.status as sinon.SinonStub).calledWith(statusCodes.OK)).to.be.true
       expect((res.json as sinon.SinonStub).calledWith(createUserResponseMock)).to.be.true
+    })
+  })
+
+  describe('ReadOne method', () => {
+    afterEach(() => sinon.restore())
+
+    it('should return one user', async () => {
+      sinon.stub(userServices, 'readOne').resolves(readOneUserResponseMock as unknown as IReadOneUserResponse)
+      req.params = { userId: readOneUserResponseMock.id }
+
+      await userController.readOne(req, res)
+      expect((res.status as sinon.SinonStub).calledWith(statusCodes.OK)).to.be.true
+      expect((res.json as sinon.SinonStub).calledWith(createUserResponseMock)).to.be.true
+      req.params = {}
     })
   })
 })

@@ -1,7 +1,7 @@
 import sinon from 'sinon'
 import chai from 'chai'
 import UserServices from './user-services'
-import { createUserDataMock, createUserPrismaResponseMock, createUserResponseMock } from '../utils/mocks/user-mocks'
+import { createUserDataMock, createUserPrismaResponseMock, createUserResponseMock, readOneUserPrismaResponseMock, readOneUserResponseMock } from '../utils/mocks/user-mocks'
 import tokenHandler from '../utils/jwt'
 import PasswordHandler from '../utils/password-handler'
 import CustomError from '../utils/error-handling/custom-error'
@@ -53,6 +53,17 @@ describe('User Services', () => {
         expect(error).to.be.instanceOf(CustomError)
         expect(error).to.have.property('status', statusCodes.NOT_FOUND)
       }
+    })
+  })
+
+  describe('ReadOne method', () => {
+    afterEach(() => sinon.restore())
+
+    it('should return one user', async () => {
+      sinon.stub(mockedPrisma.user, 'findUnique').resolves(readOneUserPrismaResponseMock)
+
+      const user = await userServices.readOne('validuserid')
+      expect(user).to.be.deep.equal(readOneUserResponseMock)
     })
   })
 })
