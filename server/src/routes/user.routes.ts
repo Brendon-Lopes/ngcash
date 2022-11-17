@@ -19,4 +19,9 @@ userRouter.post(
   async (req, res) => await userController.login(req, res)
 )
 
+userRouter.get(
+  '/:userId',
+  async (req, res) => await userController.readOne(req, res)
+)
+
 export default userRouter
