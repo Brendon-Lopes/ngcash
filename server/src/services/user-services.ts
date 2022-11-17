@@ -1,4 +1,4 @@
-import { PrismaClient, User } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 import IUserServices from '../interfaces/IUserServices'
 import CustomError from '../utils/error-handling/custom-error'
 import statusCodes from 'http-status-codes'
@@ -7,11 +7,12 @@ import ICreateUserResponse from '../interfaces/ICreateUserResponse'
 import tokenHandler from '../utils/jwt'
 import ILoginData from '../interfaces/ILoginData'
 import ILoginResponse from '../interfaces/ILoginResponse'
+import ICreateUserData from '../interfaces/ICreateUserData'
 
 export default class UserServices implements IUserServices {
   constructor (private readonly prisma: PrismaClient) {}
 
-  async create (data: User): Promise<ICreateUserResponse> {
+  async create (data: ICreateUserData): Promise<ICreateUserResponse> {
     await this._verifyUsername(data.username)
 
     const password = await PasswordHandler.hash(data.password)
