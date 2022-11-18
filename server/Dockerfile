@@ -10,7 +10,9 @@ RUN npm install
 
 COPY . ./
 
-RUN npx prisma generate
+RUN npm install -g prisma
+
+RUN prisma generate
 
 EXPOSE 3001
 
