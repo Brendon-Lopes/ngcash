@@ -6,17 +6,11 @@ import tokenHandler from '../utils/jwt'
 import PasswordHandler from '../utils/password-handler'
 import CustomError from '../utils/error-handling/custom-error'
 import statusCodes from 'http-status-codes'
+import { mockedPrisma } from '../utils/mocks/prisma-mock'
 
 const { expect } = chai
 
 describe('User Services', () => {
-  const mockedPrisma = {
-    user: {
-      findUnique: async (): Promise<any> => {},
-      create: async (): Promise<any> => {},
-    }
-  }
-
   const userServices = new UserServices(mockedPrisma as any)
 
   describe('Create method', () => {
