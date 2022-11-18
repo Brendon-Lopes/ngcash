@@ -1,7 +1,8 @@
 const prismaFunctions = {
   findUnique: async (): Promise<any> => {},
   create: async (): Promise<any> => {},
-  update: async (): Promise<any> => {}
+  update: async (): Promise<any> => {},
+  findMany: async (): Promise<any> => {}
 }
 
 export const mockedPrisma = {
