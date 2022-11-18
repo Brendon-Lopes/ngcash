@@ -3,7 +3,7 @@ import chai from 'chai'
 import TransactionServices from './transaction-services'
 import { mockedPrisma } from '../utils/mocks/prisma-mock'
 import tokenHandler from '../utils/jwt'
-import { recipientAccountMock, recipientUserMock, senderAccountMock, senderUserMock } from '../utils/mocks/transaction-mocks'
+import { prismaTransactionsResponseMock, recipientAccountMock, recipientUserMock, senderAccountMock, senderUserMock, transactionServiceResponseMock } from '../utils/mocks/transaction-mocks'
 import ICreateTransactionData from '../interfaces/ICreateTransactionData'
 
 const { expect } = chai
@@ -33,6 +33,19 @@ describe('Transaction Services', () => {
       const response = await transactionServices.create(createTransactionData, 'validtoken')
       expect(response).to.be.deep.equal({ debitedValue: 100 })
       expect((mockedPrisma.$transaction as sinon.SinonStub).calledOnce).to.be.true
+    })
+  })
+
+  describe('Read method', () => {
+    afterEach(() => sinon.restore())
+
+    it('should return all transactions related to the current account', async () => {
+      sinon.stub(tokenHandler, 'verifyToken').returns({ accountId: senderUserMock.accountId })
+      sinon.stub(mockedPrisma.transaction, 'findMany').resolves(prismaTransactionsResponseMock)
+
+      const response = await transactionServices.read('validtoken')
+      expect(response).to.be.deep.equal(transactionServiceResponseMock)
+      expect((mockedPrisma.transaction.findMany as sinon.SinonStub).calledOnce).to.be.true
     })
   })
 })

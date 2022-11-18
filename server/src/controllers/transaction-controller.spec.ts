@@ -5,6 +5,8 @@ import prismaClient from '../database/prismaClient'
 import TransactionController from './transaction-controller'
 import { Request, Response } from 'express'
 import statusCodes from 'http-status-codes'
+import { transactionServiceResponseMock } from '../utils/mocks/transaction-mocks'
+import IReadTransactionResponse from '../interfaces/IReadTransactionResponse'
 
 const { expect } = chai
 
@@ -33,6 +35,18 @@ describe('Transaction Controller', () => {
       await transactionController.create(req, res)
       expect((res.status as sinon.SinonStub).calledWith(statusCodes.CREATED)).to.be.true
       expect((res.json as sinon.SinonStub).calledWith({debitedValue})).to.be.true
+    })
+  })
+
+  describe('Read method', () => {
+    afterEach(() => sinon.restore())
+
+    it('should return all transactions related to the current account', async () => {
+      sinon.stub(transactionServices, 'read').resolves(transactionServiceResponseMock as unknown as IReadTransactionResponse[])
+
+      await transactionController.read(req, res)
+      expect((res.status as sinon.SinonStub).calledWith(statusCodes.OK)).to.be.true
+      expect((res.json as sinon.SinonStub).calledWith(transactionServiceResponseMock)).to.be.true
     })
   })
 })
