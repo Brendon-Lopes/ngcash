@@ -16,8 +16,8 @@ app.use(cors())
 
 app.get('/', (req, res) => res.status(418).send())
 
-app.use('/user', userRouter)
-app.use('/transaction', transactionRouter)
+app.use('/users', userRouter)
+app.use('/transactions', transactionRouter)
 
 app.use(globalErrorHandler)
 
