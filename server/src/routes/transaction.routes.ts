@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import CreateTransactionController from '../factories/create-transaction-controller'
+import ValidateCreateTransaction from '../middlewares/validate-create-transaction'
 import ValidateToken from '../middlewares/validate-token'
 
 const transactionRouter = Router()
@@ -10,6 +11,7 @@ transactionRouter.use(ValidateToken.execute)
 
 transactionRouter.post(
   '/',
+  (req, res, next) => ValidateCreateTransaction.validate(req, res, next),
   async (req, res) => await transactionController.create(req, res)
 )
 
