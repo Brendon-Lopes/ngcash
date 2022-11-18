@@ -5,7 +5,8 @@
   "main": "src/index.ts",
   "scripts": {
     "dev": "tsnd --respawn --transpile-only --exit-child --ignore-watch node_modules src/index.ts",
-    "migrate": "npx prisma migrate dev --name init --skip-generate",
+    "db:migrate": "prisma migrate dev --name init --skip-generate",
+    "db:seed": "prisma db seed",
     "test": "mocha --require ts-node/register 'src/**/**/*.spec.ts' --exit",
     "test:coverage": "nyc npm test"
   },
