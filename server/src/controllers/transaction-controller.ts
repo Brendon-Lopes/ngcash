@@ -9,4 +9,9 @@ export default class TransactionController {
     const transaction = await this.transactionServices.create(req.body, req.headers.authorization as string)
     return res.status(statusCodes.CREATED).json(transaction)
   }
+
+  async read (req: Request, res: Response): Promise<Response> {
+    const transactions = await this.transactionServices.read(req.headers.authorization as string)
+    return res.status(statusCodes.OK).json(transactions)
+  }
 }

@@ -15,4 +15,9 @@ transactionRouter.post(
   async (req, res) => await transactionController.create(req, res)
 )
 
+transactionRouter.get(
+  '/',
+  async (req, res) => await transactionController.read(req, res)
+)
+
 export default transactionRouter

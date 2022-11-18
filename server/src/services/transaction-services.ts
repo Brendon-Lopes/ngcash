@@ -6,6 +6,7 @@ import ITransactionServices from '../interfaces/ITransactionServices'
 import CustomError from '../utils/error-handling/custom-error'
 import tokenHandler from '../utils/jwt'
 import statusCodes from 'http-status-codes'
+import IReadTransactionResponse from '../interfaces/IReadTransactionResponse'
 
 export default class TransactionServices implements ITransactionServices {
   constructor (private readonly prisma: PrismaClient) {}
@@ -50,6 +51,50 @@ export default class TransactionServices implements ITransactionServices {
       })
 
     return { debitedValue: data.value }
+  }
+
+  async read (token: string): Promise<IReadTransactionResponse[]> {
+    const { accountId } = tokenHandler.verifyToken(token) as JwtPayload
+
+    const transactions = await this.prisma.transaction.findMany({
+      where: {
+        OR: [
+          { debitedAccountId: accountId },
+          { creditedAccountId: accountId }
+        ]
+      },
+      include: {
+        creditedAccount: {
+          include: {
+            user: {
+              select: {
+                username: true
+              }
+            }
+          }
+        },
+        debitedAccount: {
+          include: {
+            user: {
+              select: {
+                username: true
+              }
+            }
+          }
+        }
+      }
+    })
+
+    return transactions.map(transaction => ({
+      debitedValue: transaction.value,
+      debitedAccount: transaction.debitedAccountId,
+      creditedAccount: transaction.creditedAccountId,
+      type: transaction.debitedAccountId === accountId ? 'debit' : 'credit',
+      date: transaction.createdAt,
+      relation: transaction.debitedAccountId === accountId
+        ? transaction.creditedAccount.user?.username
+        : transaction.debitedAccount.user?.username
+    }))
   }
 
   private async _verifyIfAccountHasEnoughBalance (accountId: string, value: number): Promise<void> {
