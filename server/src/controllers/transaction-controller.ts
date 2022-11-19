@@ -14,4 +14,12 @@ export default class TransactionController {
     const transactions = await this.transactionServices.read(req.headers.authorization as string)
     return res.status(statusCodes.OK).json(transactions)
   }
+
+  async readFilteredByDate (req: Request, res: Response): Promise<Response> {
+    const token = req.headers.authorization as string
+    const { startDate, endDate } = req.query as { startDate: string, endDate: string }
+
+    const transactions = await this.transactionServices.readFilteredByDate({ startDate, endDate }, token)
+    return res.status(statusCodes.OK).json(transactions)
+  }
 }

@@ -7,6 +7,7 @@ import CustomError from '../utils/error-handling/custom-error'
 import tokenHandler from '../utils/jwt'
 import statusCodes from 'http-status-codes'
 import IReadTransactionResponse from '../interfaces/IReadTransactionResponse'
+import ITransactionFilter from '../interfaces/ITransactionFilter'
 
 export default class TransactionServices implements ITransactionServices {
   constructor (private readonly prisma: PrismaClient) {}
@@ -85,6 +86,49 @@ export default class TransactionServices implements ITransactionServices {
       }
     })
 
+    return this._formatTransactions(transactions, accountId)
+  }
+
+  async readFilteredByDate (filter: ITransactionFilter, token: string): Promise<IReadTransactionResponse[]> {
+    const { accountId } = tokenHandler.verifyToken(token) as JwtPayload
+
+    const transactions = await this.prisma.transaction.findMany({
+      where: {
+        OR: [
+          { debitedAccountId: accountId },
+          { creditedAccountId: accountId }
+        ],
+        createdAt: {
+          gte: new Date(filter.startDate),
+          lte: new Date(filter.endDate)
+        }
+      },
+      include: {
+        creditedAccount: {
+          include: {
+            user: {
+              select: {
+                username: true
+              }
+            }
+          }
+        },
+        debitedAccount: {
+          include: {
+            user: {
+              select: {
+                username: true
+              }
+            }
+          }
+        }
+      }
+    })
+
+    return this._formatTransactions(transactions, accountId)
+  }
+
+  private _formatTransactions (transactions: any[], accountId: string): IReadTransactionResponse[] {
     return transactions.map(transaction => ({
       debitedValue: transaction.value,
       debitedAccount: transaction.debitedAccountId,
