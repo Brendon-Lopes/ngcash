@@ -10,7 +10,7 @@ export default abstract class ZodValidation {
 
     if (!result.success) {
       const errors = result.error.issues.map(({ path, message }) => ({ [path[0]]: message }))
-      return res.status(statusCodes.BAD_REQUEST).json({ errors })
+      return res.status(statusCodes.BAD_REQUEST).json({ error: errors })
     }
 
     next()
