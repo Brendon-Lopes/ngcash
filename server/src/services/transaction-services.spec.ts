@@ -48,4 +48,17 @@ describe('Transaction Services', () => {
       expect((mockedPrisma.transaction.findMany as sinon.SinonStub).calledOnce).to.be.true
     })
   })
+
+  describe('ReadFilteredByDate method', () => {
+    afterEach(() => sinon.restore())
+
+    it('should return all transactions related to the current account filtered by date', async () => {
+      sinon.stub(tokenHandler, 'verifyToken').returns({ accountId: senderUserMock.accountId })
+      sinon.stub(mockedPrisma.transaction, 'findMany').resolves(prismaTransactionsResponseMock)
+
+      const response = await transactionServices.readFilteredByDate({ startDate: '2022-11-18T00:00:00.000Z', endDate: '2022-11-18T23:59:59.999Z' }, 'validtoken')
+      expect(response).to.be.deep.equal(transactionServiceResponseMock)
+      expect((mockedPrisma.transaction.findMany as sinon.SinonStub).calledOnce).to.be.true
+    })
+  })
 })

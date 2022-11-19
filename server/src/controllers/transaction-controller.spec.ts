@@ -35,6 +35,8 @@ describe('Transaction Controller', () => {
       await transactionController.create(req, res)
       expect((res.status as sinon.SinonStub).calledWith(statusCodes.CREATED)).to.be.true
       expect((res.json as sinon.SinonStub).calledWith({debitedValue})).to.be.true
+      req.body = {}
+      req.headers = {}
     })
   })
 
@@ -47,6 +49,20 @@ describe('Transaction Controller', () => {
       await transactionController.read(req, res)
       expect((res.status as sinon.SinonStub).calledWith(statusCodes.OK)).to.be.true
       expect((res.json as sinon.SinonStub).calledWith(transactionServiceResponseMock)).to.be.true
+    })
+  })
+
+  describe('ReadFilteredByDate method', () => {
+    afterEach(() => sinon.restore())
+
+    it('should return all transactions related to the current account filtered by date', async () => {
+      sinon.stub(transactionServices, 'readFilteredByDate').resolves(transactionServiceResponseMock as unknown as IReadTransactionResponse[])
+      req.query = { startDate: '2022-11-18T00:00:00.000Z', endDate: '2022-11-18T23:59:59.999Z' }
+
+      await transactionController.readFilteredByDate(req, res)
+      expect((res.status as sinon.SinonStub).calledWith(statusCodes.OK)).to.be.true
+      expect((res.json as sinon.SinonStub).calledWith(transactionServiceResponseMock)).to.be.true
+      req.query = {}
     })
   })
 })
