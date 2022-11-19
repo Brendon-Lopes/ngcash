@@ -49,7 +49,7 @@ export const transactionServiceResponseMock = [
     debitedValue: '10',
     debitedAccount: 'clamqnqdu0005s00ptycfo6ng',
     creditedAccount: 'clamqn1jn0001s00p9m0ovtgq',
-    type: 'credit',
+    type: 'cash-in',
     date: '2022-11-18T16:53:05.002Z',
     relation: 'user2'
   }
