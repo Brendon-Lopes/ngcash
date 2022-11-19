@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import ITransactionServices from '../interfaces/ITransactionServices'
 import statusCodes from 'http-status-codes'
+import ITransactionFilter from '../interfaces/ITransactionFilter'
 
 export default class TransactionController {
   constructor (private readonly transactionServices: ITransactionServices) {}
@@ -17,9 +18,9 @@ export default class TransactionController {
 
   async readFilteredByDate (req: Request, res: Response): Promise<Response> {
     const token = req.headers.authorization as string
-    const { startDate, endDate } = req.query as { startDate: string, endDate: string }
+    const { startDate, endDate, type } = req.query as unknown as ITransactionFilter
 
-    const transactions = await this.transactionServices.readFilteredByDate({ startDate, endDate }, token)
+    const transactions = await this.transactionServices.readFilteredByDate({ startDate, endDate, type }, token)
     return res.status(statusCodes.OK).json(transactions)
   }
 }

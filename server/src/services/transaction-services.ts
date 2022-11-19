@@ -7,7 +7,7 @@ import CustomError from '../utils/error-handling/custom-error'
 import tokenHandler from '../utils/jwt'
 import statusCodes from 'http-status-codes'
 import IReadTransactionResponse from '../interfaces/IReadTransactionResponse'
-import ITransactionFilter from '../interfaces/ITransactionFilter'
+import ITransactionFilter, { TransactionType } from '../interfaces/ITransactionFilter'
 
 export default class TransactionServices implements ITransactionServices {
   constructor (private readonly prisma: PrismaClient) {}
@@ -125,7 +125,11 @@ export default class TransactionServices implements ITransactionServices {
       }
     })
 
-    return this._formatTransactions(transactions, accountId)
+    const formattedTransactions = this._formatTransactions(transactions, accountId)
+
+    if (filter.type === undefined) return formattedTransactions
+
+    return this._formatTransactionsByType(formattedTransactions, filter.type as TransactionType)
   }
 
   private _formatTransactions (transactions: any[], accountId: string): IReadTransactionResponse[] {
@@ -133,12 +137,16 @@ export default class TransactionServices implements ITransactionServices {
       debitedValue: transaction.value,
       debitedAccount: transaction.debitedAccountId,
       creditedAccount: transaction.creditedAccountId,
-      type: transaction.debitedAccountId === accountId ? 'debit' : 'credit',
+      type: transaction.debitedAccountId === accountId ? 'cash-out' : 'cash-in',
       date: transaction.createdAt,
       relation: transaction.debitedAccountId === accountId
         ? transaction.creditedAccount.user?.username
         : transaction.debitedAccount.user?.username
     }))
+  }
+
+  private _formatTransactionsByType (transactions: IReadTransactionResponse[], type: TransactionType): IReadTransactionResponse[] {
+    return transactions.filter(transaction => transaction.type === type)
   }
 
   private async _verifyIfAccountHasEnoughBalance (accountId: string, value: number): Promise<void> {
