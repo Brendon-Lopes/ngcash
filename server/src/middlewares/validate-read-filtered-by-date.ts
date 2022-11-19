@@ -4,18 +4,22 @@ import statusCodes from 'http-status-codes'
 
 export default class ValidateReadFilteredByDate {
   static validate (req: Request, _res: Response, next: NextFunction): void {
-    const { startDate, endDate } = req.query as { startDate: string, endDate: string }
+    const { startDate, endDate } = req.query
+
+    if (startDate === undefined || endDate === undefined) {
+      throw new CustomError(statusCodes.BAD_REQUEST, 'Missing query parameters \'startDate\' and/or \'endDate\'')
+    }
 
     if ((startDate.length === 0) || (endDate.length === 0)) {
       throw new CustomError(statusCodes.BAD_REQUEST, 'Missing query params')
     }
 
-    if (!this._isIsoDate(startDate) || !this._isIsoDate(endDate)) {
+    if (!this._isIsoDate(startDate as string) || !this._isIsoDate(endDate as string)) {
       throw new CustomError(statusCodes.BAD_REQUEST, 'Invalid date format. Should be ISO 8601')
     }
 
-    const startDateTimestamp = new Date(startDate).getTime()
-    const endDateTimestamp = new Date(endDate).getTime()
+    const startDateTimestamp = new Date(startDate as string).getTime()
+    const endDateTimestamp = new Date(endDate as string).getTime()
 
     if (startDateTimestamp > endDateTimestamp) {
       throw new CustomError(statusCodes.BAD_REQUEST, 'Invalid date range')
