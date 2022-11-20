@@ -10,6 +10,9 @@
     "test": "mocha --require ts-node/register 'src/**/**/*.spec.ts' --exit",
     "test:coverage": "nyc npm test"
   },
+  "prisma": {
+    "seed": "ts-node --transpile-only prisma/seed.ts"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
