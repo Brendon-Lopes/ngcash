@@ -16,7 +16,8 @@ export default class UserController {
   }
 
   async readOne (req: Request, res: Response): Promise<Response> {
-    const user = await this.userServices.readOne(req.params.userId)
+    const token = req.headers.authorization as string
+    const user = await this.userServices.readOne(token)
     return res.status(statusCodes.OK).json(user)
   }
 }

@@ -23,7 +23,7 @@ userRouter.post(
 userRouter.use(ValidateToken.execute)
 
 userRouter.get(
-  '/:userId',
+  '/',
   async (req, res) => await userController.readOne(req, res)
 )
 

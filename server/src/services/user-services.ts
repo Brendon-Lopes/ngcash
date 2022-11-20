@@ -9,6 +9,7 @@ import ILoginData from '../interfaces/ILoginData'
 import ILoginResponse from '../interfaces/ILoginResponse'
 import ICreateUserData from '../interfaces/ICreateUserData'
 import IReadOneUserResponse from '../interfaces/IReadOneUserResponse'
+import { JwtPayload } from 'jsonwebtoken'
 
 export default class UserServices implements IUserServices {
   constructor (private readonly prisma: PrismaClient) {}
@@ -55,9 +56,11 @@ export default class UserServices implements IUserServices {
     }
   }
 
-  async readOne (userId: string): Promise<IReadOneUserResponse> {
+  async readOne (token: string): Promise<IReadOneUserResponse> {
+    const { id } = tokenHandler.verifyToken(token) as JwtPayload
+
     const user = await this.prisma.user.findUnique({
-      where: { id: userId },
+      where: { id },
       select: {
         id: true,
         username: true,
