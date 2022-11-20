@@ -55,8 +55,9 @@ describe('User Services', () => {
 
     it('should return one user', async () => {
       sinon.stub(mockedPrisma.user, 'findUnique').resolves(readOneUserPrismaResponseMock)
+      sinon.stub(tokenHandler, 'verifyToken').returns({ id: 'clak46hxp0000o89qiv0tiggt' })
 
-      const user = await userServices.readOne('validuserid')
+      const user = await userServices.readOne('validtoken')
       expect(user).to.be.deep.equal(readOneUserResponseMock)
     })
   })

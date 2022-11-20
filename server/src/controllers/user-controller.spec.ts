@@ -51,12 +51,12 @@ describe('User Controller', () => {
 
     it('should return one user', async () => {
       sinon.stub(userServices, 'readOne').resolves(readOneUserResponseMock as unknown as IReadOneUserResponse)
-      req.params = { userId: readOneUserResponseMock.id }
+      req.headers = { authorization: 'token' }
 
       await userController.readOne(req, res)
       expect((res.status as sinon.SinonStub).calledWith(statusCodes.OK)).to.be.true
       expect((res.json as sinon.SinonStub).calledWith(createUserResponseMock)).to.be.true
-      req.params = {}
+      req.headers = {}
     })
   })
 })
