@@ -4,7 +4,11 @@ import statusCodes from 'http-status-codes'
 
 export default class ValidateReadFilteredByDate {
   static validate (req: Request, _res: Response, next: NextFunction): void {
-    const { startDate, endDate } = req.query
+    const { startDate, endDate, type } = req.query
+
+    if (type !== undefined && type !== 'cash-in' && type !== 'cash-out') {
+      throw new CustomError(statusCodes.BAD_REQUEST, 'Invalid type. Type must be \'cash-in\' or \'cash-out\'')
+    }
 
     if (startDate === undefined || endDate === undefined) {
       throw new CustomError(statusCodes.BAD_REQUEST, 'Missing query parameters \'startDate\' and/or \'endDate\'')
