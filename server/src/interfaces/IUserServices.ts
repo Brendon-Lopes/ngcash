@@ -7,5 +7,5 @@ import IReadOneUserResponse from './IReadOneUserResponse'
 export default interface IUserServices {
   create: (user: ICreateUserData) => Promise<ICreateUserResponse>
   login: (data: ILoginData) => Promise<ILoginResponse>
-  readOne: (userId: string) => Promise<IReadOneUserResponse>
+  readOne: (token: string) => Promise<IReadOneUserResponse>
 }
