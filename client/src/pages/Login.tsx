@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import * as userServices from '../services/userServices'
 import { useCookies } from 'react-cookie'
+import { loginValidation } from '../validations'
 
 export default function Login() {
   const [error, setError] = useState(false)
@@ -15,7 +16,7 @@ export default function Login() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm()
+  } = useForm({ resolver: loginValidation })
 
   const handleLogin = async (data: any) => {
     const { username, password } = data
