@@ -2,12 +2,14 @@ import { useForm } from 'react-hook-form'
 import { userServices } from '../services'
 import { registerValidation } from '../validations'
 import { useCookies } from 'react-cookie'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Nav } from '../components'
 
 export default function Register() {
   const [cookies, setCookie] = useCookies(['token'])
+
+  const [error, setError] = useState('')
 
   const navigate = useNavigate()
 
@@ -24,8 +26,10 @@ export default function Register() {
       const response = await userServices.register(username, password)
 
       setCookie('token', response.token, { path: '/' })
-    } catch (error) {
-      console.log(error)
+    } catch (error: any) {
+      if (error.response.status === 409) {
+        setError('Username já existe')
+      }
     }
   }
 
@@ -47,20 +51,22 @@ export default function Register() {
           <input type="text" {...register('username')} />
         </label>
 
-        {errors?.username?.message !== undefined && (
-          <p className="text-red-600">{errors.username.message as string}</p>
-        )}
-
         <label htmlFor="password">
           Password
           <input type="password" {...register('password')} />
         </label>
 
+        <button type="submit">Criar conta</button>
+
+        {errors?.username?.message !== undefined && (
+          <p className="text-red-600">{errors.username.message as string}</p>
+        )}
+
         {errors?.password?.message !== undefined && (
           <p className="text-red-600">{errors.password.message as string}</p>
         )}
 
-        <button type="submit">Criar conta</button>
+        {error !== '' && <p className="text-red-600">{error}</p>}
       </form>
     </div>
   )
