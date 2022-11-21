@@ -37,13 +37,18 @@ const getFilteredTransactions = async (
   token: string,
   filterOptions: ITransactionFilterOptions
 ): Promise<ITransaction[]> => {
+  let startDate = ''
+  let endDate = ''
+
+  if (filterOptions.startDate !== '' && filterOptions.endDate !== '') {
+    const start = new Date(filterOptions.startDate).setUTCHours(0, 0, 1)
+    startDate = new Date(start).toISOString()
+
+    const end = new Date(filterOptions.endDate).setUTCHours(24)
+    endDate = new Date(end).toISOString()
+  }
+
   let endpoint: string
-
-  const start = new Date(filterOptions.startDate).setUTCHours(0, 0, 1)
-  const startDate = new Date(start).toISOString()
-
-  const end = new Date(filterOptions.endDate).setUTCHours(24)
-  const endDate = new Date(end).toISOString()
 
   if (filterOptions.type === 'all') {
     endpoint = `/transactions/filter?startDate=${startDate}&endDate=${endDate}`
