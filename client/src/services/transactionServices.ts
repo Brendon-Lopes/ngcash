@@ -39,10 +39,16 @@ const getFilteredTransactions = async (
 ): Promise<ITransaction[]> => {
   let endpoint: string
 
-  if (filterOptions.type === undefined) {
-    endpoint = `/transactions/filter?startDate=${filterOptions.startDate}&endDate=${filterOptions.endDate}`
+  const start = new Date(filterOptions.startDate).setUTCHours(0, 0, 1)
+  const startDate = new Date(start).toISOString()
+
+  const end = new Date(filterOptions.endDate).setUTCHours(24)
+  const endDate = new Date(end).toISOString()
+
+  if (filterOptions.type === 'all') {
+    endpoint = `/transactions/filter?startDate=${startDate}&endDate=${endDate}`
   } else {
-    endpoint = `/transactions/filter?startDate=${filterOptions.startDate}&endDate=${filterOptions.endDate}&type=${filterOptions.type}`
+    endpoint = `/transactions/filter?startDate=${startDate}&endDate=${endDate}&type=${filterOptions.type}`
   }
 
   const response = await api.get(endpoint, {
