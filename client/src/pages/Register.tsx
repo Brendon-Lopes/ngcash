@@ -4,6 +4,7 @@ import { registerValidation } from '../validations'
 import { useCookies } from 'react-cookie'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Nav } from '../components'
 
 export default function Register() {
   const [cookies, setCookie] = useCookies(['token'])
@@ -38,6 +39,7 @@ export default function Register() {
 
   return (
     <div>
+      <Nav />
       <h1>Cadastro</h1>
       <form onSubmit={handleSubmit(handleRegister)}>
         <label htmlFor="username">
