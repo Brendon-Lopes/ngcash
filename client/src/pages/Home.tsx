@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react'
 import { useCookies } from 'react-cookie'
 import { useNavigate } from 'react-router-dom'
-import { Nav, NewTransaction } from '../components'
-import { userServices } from '../services'
+import { Nav, NewTransaction, Transactions } from '../components'
+import { ITransaction } from '../interfaces'
+import { transactionServices, userServices } from '../services'
 
 export default function Home() {
   const [cookies] = useCookies(['token'])
 
   const [balance, setBalance] = useState('')
+
+  const [transactions, setTransactions] = useState<ITransaction[]>([])
 
   const [triggerTransfer, setTriggerTransfer] = useState(false)
 
@@ -25,6 +28,13 @@ export default function Home() {
           setBalance(balance)
         })
         .catch((err) => console.log(err))
+
+      transactionServices
+        .getTransactions(cookies.token)
+        .then((transactions) => {
+          setTransactions(transactions)
+        })
+        .catch((err) => console.log(err))
     }
   }, [cookies, triggerTransfer])
 
@@ -36,6 +46,7 @@ export default function Home() {
         triggerTransfer={triggerTransfer}
         setTriggerTransfer={setTriggerTransfer}
       />
+      <Transactions transactions={transactions} />
     </div>
   )
 }
