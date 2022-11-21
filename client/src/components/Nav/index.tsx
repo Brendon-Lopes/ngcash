@@ -1,7 +1,7 @@
 import LogoNgcash from '../../assets/logo-ngcash.svg'
 import { NavLink } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
-import { jwt, transformPrice } from '../../utils'
+import { jwt, transformCurrency } from '../../utils'
 import { useEffect, useState } from 'react'
 import { userServices } from '../../services'
 
@@ -39,7 +39,7 @@ export default function Nav() {
         <div className="flex items-center gap-8">
           <img src={LogoNgcash} alt="Logo NGCash" className="h-10" />
           <p className="text-white">Olá, {getUsername()}</p>
-          <p className="text-white">Saldo: {transformPrice(balance)}</p>
+          <p className="text-white">Saldo: {transformCurrency(balance)}</p>
           <button
             onClick={handleLogout}
             className="bg-slate-100 py-1 px-4 rounded"

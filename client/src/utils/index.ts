@@ -1,4 +1,4 @@
 import * as jwt from './jwt'
-import transformPrice from './transformPrice'
+import transformCurrency from './transformPrice'
 
-export { jwt, transformPrice }
+export { jwt, transformCurrency }
