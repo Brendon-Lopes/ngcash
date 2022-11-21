@@ -1,3 +1,4 @@
 import { loginValidation } from './loginValidation'
+import { registerValidation } from './registerValidation'
 
-export { loginValidation }
+export { loginValidation, registerValidation }
