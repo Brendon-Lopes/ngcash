@@ -10,4 +10,13 @@ const register = async (username: string, password: string) => {
   return response.data
 }
 
-export { login, register }
+const getBalance = async (token: string) => {
+  const response = await api.get('/users', {
+    headers: {
+      Authorization: token,
+    },
+  })
+  return response.data.balance
+}
+
+export { login, register, getBalance }
