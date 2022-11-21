@@ -2,13 +2,10 @@ import LogoNgcash from '../../assets/logo-ngcash.svg'
 import { NavLink } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
 import { jwt, transformCurrency } from '../../utils'
-import { useEffect, useState } from 'react'
-import { userServices } from '../../services'
+import { useEffect } from 'react'
 
-export default function Nav() {
+export default function Nav(props: { balance?: string }) {
   const [cookies, , removeCookie] = useCookies(['token'])
-
-  const [balance, setBalance] = useState('')
 
   const handleLogout = () => {
     removeCookie('token', { path: '/' })
@@ -24,14 +21,7 @@ export default function Nav() {
     }
   }
 
-  useEffect(() => {
-    if (cookies.token !== undefined) {
-      userServices
-        .getBalance(cookies.token)
-        .then((balance) => setBalance(balance))
-        .catch((err) => console.log(err))
-    }
-  }, [cookies])
+  useEffect(() => {}, [props.balance])
 
   if (cookies.token !== undefined) {
     return (
@@ -39,7 +29,9 @@ export default function Nav() {
         <div className="flex items-center gap-8">
           <img src={LogoNgcash} alt="Logo NGCash" className="h-10" />
           <p className="text-white">Olá, {getUsername()}</p>
-          <p className="text-white">Saldo: {transformCurrency(balance)}</p>
+          <p className="text-white">
+            Saldo: {transformCurrency(props.balance as string)}
+          </p>
           <button
             onClick={handleLogout}
             className="bg-slate-100 py-1 px-4 rounded"

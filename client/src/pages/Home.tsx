@@ -1,27 +1,41 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useCookies } from 'react-cookie'
 import { useNavigate } from 'react-router-dom'
-import { Nav } from '../components'
+import { Nav, NewTransaction } from '../components'
+import { userServices } from '../services'
 
 export default function Home() {
   const [cookies] = useCookies(['token'])
+
+  const [balance, setBalance] = useState('')
+
+  const [triggerTransfer, setTriggerTransfer] = useState(false)
 
   const navigate = useNavigate()
 
   useEffect(() => {
     document.title = 'Home'
 
-    const { token } = cookies
-
-    if (token === undefined) {
+    if (cookies.token === undefined) {
       navigate('/login')
+    } else {
+      userServices
+        .getBalance(cookies.token)
+        .then((balance) => {
+          setBalance(balance)
+        })
+        .catch((err) => console.log(err))
     }
-  }, [cookies])
+  }, [cookies, triggerTransfer])
 
   return (
     <div>
-      <Nav />
-      <h1>Home</h1>
+      <Nav balance={balance} />
+      <NewTransaction
+        balance={balance}
+        triggerTransfer={triggerTransfer}
+        setTriggerTransfer={setTriggerTransfer}
+      />
     </div>
   )
 }
