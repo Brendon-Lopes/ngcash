@@ -8,7 +8,7 @@ const newTransaction = async (
   const response = await api.post(
     '/transactions',
     {
-      value,
+      value: Number(value),
       creditedAccountUsername,
     },
     {
