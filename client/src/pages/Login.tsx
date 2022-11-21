@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import * as userServices from '../services/userServices'
+import { userServices } from '../services'
 import { useCookies } from 'react-cookie'
 import { loginValidation } from '../validations'
+import { Nav } from '../components'
 
 export default function Login() {
   const [error, setError] = useState(false)
@@ -43,6 +44,7 @@ export default function Login() {
 
   return (
     <div>
+      <Nav />
       <h1>Login</h1>
       <form onSubmit={handleSubmit(handleLogin)}>
         <label htmlFor="username">
