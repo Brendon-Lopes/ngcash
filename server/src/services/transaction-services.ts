@@ -95,6 +95,22 @@ export default class TransactionServices implements ITransactionServices {
   async readFilteredByDate (filter: ITransactionFilter, token: string): Promise<IReadTransactionResponse[]> {
     const { accountId } = tokenHandler.verifyToken(token) as JwtPayload
 
+    let transactions
+
+    if (filter.startDate !== '' && filter.endDate !== '') {
+      transactions = await this._filterByDate(filter, accountId)
+    } else {
+      transactions = await this._getFromAllDates(accountId)
+    }
+
+    const formattedTransactions = this._formatTransactions(transactions, accountId)
+
+    if (filter.type === undefined) return formattedTransactions
+
+    return this._formatTransactionsByType(formattedTransactions, filter.type as TransactionType)
+  }
+
+  private async _filterByDate (filter: ITransactionFilter, accountId: string): Promise<any> {
     const transactions = await this.prisma.transaction.findMany({
       where: {
         OR: [
@@ -131,11 +147,43 @@ export default class TransactionServices implements ITransactionServices {
       }
     })
 
-    const formattedTransactions = this._formatTransactions(transactions, accountId)
+    return transactions
+  }
 
-    if (filter.type === undefined) return formattedTransactions
+  private async _getFromAllDates (accountId: string): Promise<any> {
+    const transactions = await this.prisma.transaction.findMany({
+      where: {
+        OR: [
+          { debitedAccountId: accountId },
+          { creditedAccountId: accountId }
+        ]
+      },
+      include: {
+        creditedAccount: {
+          include: {
+            user: {
+              select: {
+                username: true
+              }
+            }
+          }
+        },
+        debitedAccount: {
+          include: {
+            user: {
+              select: {
+                username: true
+              }
+            }
+          }
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    })
 
-    return this._formatTransactionsByType(formattedTransactions, filter.type as TransactionType)
+    return transactions
   }
 
   private _formatTransactions (transactions: any[], accountId: string): IReadTransactionResponse[] {

@@ -10,12 +10,12 @@ export default class ValidateReadFilteredByDate {
       throw new CustomError(statusCodes.BAD_REQUEST, 'Invalid type. Type must be \'cash-in\' or \'cash-out\'')
     }
 
-    if (startDate === undefined || endDate === undefined) {
-      throw new CustomError(statusCodes.BAD_REQUEST, 'Missing query parameters \'startDate\' and/or \'endDate\'')
+    if (startDate === '' && endDate === '') {
+      return next()
     }
 
-    if ((startDate.length === 0) || (endDate.length === 0)) {
-      throw new CustomError(statusCodes.BAD_REQUEST, 'Missing query params')
+    if ((startDate !== '' && endDate === '') || (startDate === '' && endDate !== '')) {
+      throw new CustomError(statusCodes.BAD_REQUEST, 'Both startDate and endDate must be informed if filtering by date')
     }
 
     if (!this._isIsoDate(startDate as string) || !this._isIsoDate(endDate as string)) {
