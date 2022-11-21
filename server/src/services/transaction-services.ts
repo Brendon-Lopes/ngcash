@@ -83,6 +83,9 @@ export default class TransactionServices implements ITransactionServices {
             }
           }
         }
+      },
+      orderBy: {
+        createdAt: 'desc'
       }
     })
 
@@ -122,6 +125,9 @@ export default class TransactionServices implements ITransactionServices {
             }
           }
         }
+      },
+      orderBy: {
+        createdAt: 'desc'
       }
     })
 
