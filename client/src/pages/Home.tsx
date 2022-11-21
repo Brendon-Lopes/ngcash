@@ -46,7 +46,10 @@ export default function Home() {
         triggerTransfer={triggerTransfer}
         setTriggerTransfer={setTriggerTransfer}
       />
-      <Transactions transactions={transactions} />
+      <Transactions
+        transactions={transactions}
+        setTransactions={setTransactions}
+      />
     </div>
   )
 }
