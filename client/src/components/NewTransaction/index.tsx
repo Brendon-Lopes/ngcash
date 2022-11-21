@@ -53,12 +53,6 @@ export default function NewTransaction(props: {
           />
         </label>
 
-        {errors?.creditedAccountUsername?.message !== undefined && (
-          <p className="text-red-600">
-            {errors.creditedAccountUsername.message as string}
-          </p>
-        )}
-
         <label htmlFor="value">
           <input
             type="number"
@@ -68,11 +62,17 @@ export default function NewTransaction(props: {
           />
         </label>
 
+        <button type="submit">Transferir</button>
+
         {errors?.value?.message !== undefined && (
           <p className="text-red-600">{errors.value.message as string}</p>
         )}
 
-        <button type="submit">Transferir</button>
+        {errors?.creditedAccountUsername?.message !== undefined && (
+          <p className="text-red-600">
+            {errors.creditedAccountUsername.message as string}
+          </p>
+        )}
       </form>
     </div>
   )
