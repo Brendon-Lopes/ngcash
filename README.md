@@ -62,4 +62,6 @@ Por enquanto só estão disponíveis testes unitários no backend, para rodar si
 Com certeza onde gastei mais tempo nesse projeto foi no Backend, pois tentei deixar o mais bem feito possível, com testes, e tentando na medida que o tempo permitiu seguir os princípios do SOLID e Clean Code. Estou usando uma arquitetura baseada em camadas, e as camadas de Service e Controller são testadas isoladamente, utilizando Mocha, Chai e Sinon.
 
 ## Considerações finais
-É sempre um desafio concluir um projeto full stack em 7 dias, mas foi uma experiência muito boa e aprendi muito. Sempre ficam detalhes que eu gostaria de ter feito, coisas que gostaria de ter mudado, simplificado, o CSS que acabou não dando tempo de fazer muito. Mas acredito que o importante é que o projeto está funcional, e esse foi meu foco.
+É sempre um desafio concluir um projeto full stack em 7 dias, mas foi uma experiência muito boa e aprendi muito.
+Sempre ficam detalhes que eu gostaria de ter feito, coisas que gostaria de ter mudado, simplificado, o CSS que acabou não dando tempo de fazer muito e testes para o frontend.
+Mas acredito que o importante é que o projeto está funcional e atende todos os requisitos pedidos, e esse foi meu foco.
