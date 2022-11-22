@@ -25,7 +25,9 @@ Cada usuário cadastrado já tem uma conta automaticamente criada e recebe R$ 10
 ## Rodando o projeto
 Na raíz do projeto, execute o comando `docker-compose up -d` para subir os containers da aplicação.
 
-Quando os containers estiverem rodando, execute o comando `docker exec -it ngcash-server sh` para entrar no container do servidor, e rode o comando `npm run db:setup` para criar as tabelas e semear o banco de dados.
+Quando os containers estiverem rodando, execute os seguintes comandos
+  - `docker exec -it ngcash-server sh` para entrar no container do servidor (ou abra o terminal do container ngcash-server pelo Docker Desktop, caso esteja usando).
+  - `npm run db:setup` (dentro do terminal do container) para criar as tabelas e semear o banco de dados.
 
 Rode o comando `exit` se desejar sair do container.
 
