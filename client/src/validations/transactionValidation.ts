@@ -10,6 +10,7 @@ const transactionValidationSchema = yup.object().shape({
 
   value: yup
     .number()
+    .min(0.01, 'Valor deve ser maior que 0')
     .required('Valor é obrigatório')
     .typeError('Valor deve conter apenas números e ponto'),
 })

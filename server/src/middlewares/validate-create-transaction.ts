@@ -15,5 +15,6 @@ export default class ValidateCreateTransaction extends ZodValidation {
         required_error: 'value is required',
         invalid_type_error: 'value must be a number'
       })
+      .min(0.01, 'value must be greater than 0')
   })
 }
